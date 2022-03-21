@@ -8,6 +8,10 @@ The project was built using Visual Studio 2022 targeting .NET 6
 
 The architecture approach for this application was based on the following blog post(https://codewithmukesh.com/blog/multitenancy-in-aspnet-core/)
 
+Multi-tenancy can be achieved a number of different ways including Query String, Domain binding, IP address, or Claims Based. 
+
+This application handles multi-tenancy using a Request Header and highlights how tenants can share a database or, for more complex tenants, have their own database instance.
+
 ### MultiTenant.Api
 
 This layer is a Web API targeting .NET Core 6 that provides all the endpoints of the application (details to follow)
