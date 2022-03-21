@@ -1,11 +1,34 @@
+using MultiTenant.Core.Interfaces;
+using MultiTenant.Core.Settings;
+using MultiTenant.Infrastructure.Services;
+using MultiTenant.Infrastructure.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddTransient<ITenantService, TenantService>();
+builder.Services.AddTransient<IProductService, ProductService>();
+
+builder.Services.Configure<TenantSettings>(
+    builder.Configuration.GetSection(nameof(TenantSettings)));
+
+builder.Services.AddAndMigrateTenantDatabases(builder.Configuration);
+
+builder.Services.AddApiVersioning(options => {
+    options.ReportApiVersions = true;
+});
+
+builder.Services.AddVersionedApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
 
 var app = builder.Build();
 
