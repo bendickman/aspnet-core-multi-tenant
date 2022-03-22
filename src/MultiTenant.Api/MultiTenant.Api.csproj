@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MultiTenant.ApiCore\MultiTenant.ApiCore.csproj" />
     <ProjectReference Include="..\MultiTenant.Core\MultiTenant.Core.csproj" />
     <ProjectReference Include="..\MultiTenant.Infrastructure\MultiTenant.Infrastructure.csproj" />
   </ItemGroup>

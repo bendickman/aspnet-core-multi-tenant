@@ -2,15 +2,16 @@ using MultiTenant.Core.Interfaces;
 using MultiTenant.Core.Settings;
 using MultiTenant.Infrastructure.Services;
 using MultiTenant.Infrastructure.Extensions;
+using MultiTenant.ApiCore;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication
+    .CreateBuilder(args)
+    .SetupApiCore(options =>
+    {
+        options.ApiDetails.Name = "Multi Tenant API";
+        options.ApiDetails.Description = "API highlighting multi-tenancy in .NET 6";
+    });
 
-
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddControllers();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<ITenantService, TenantService>();
 builder.Services.AddTransient<IProductService, ProductService>();
@@ -20,29 +21,6 @@ builder.Services.Configure<TenantSettings>(
 
 builder.Services.AddAndMigrateTenantDatabases(builder.Configuration);
 
-builder.Services.AddApiVersioning(options => {
-    options.ReportApiVersions = true;
-});
-
-builder.Services.AddVersionedApiExplorer(options =>
-{
-    options.GroupNameFormat = "'v'VVV";
-    options.SubstituteApiVersionInUrl = true;
-});
-
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
+app.ConfigureApiCore();
 app.Run();
