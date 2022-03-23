@@ -15,7 +15,6 @@ var builder = WebApplication
         HealthChecksSetup.Setup(options.HealthChecksBuilder);
     });
 
-
 builder.Services.AddTransient<ITenantService, TenantService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 

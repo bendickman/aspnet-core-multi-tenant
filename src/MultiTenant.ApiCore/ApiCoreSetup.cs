@@ -1,10 +1,9 @@
-﻿
-
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using MultiTenant.ApiCore.HealthChecks;
 using MultiTenant.ApiCore.Swagger;
 using MultiTenant.ApiCore.Versioning;
+using MultiTenant.ApiCore.ExceptionHandling;
 
 namespace MultiTenant.ApiCore
 {
@@ -19,6 +18,7 @@ namespace MultiTenant.ApiCore
 
         public static void ConfigureApiCore(this WebApplication app)
         {
+            app.UseExceptionHandling();
             app.UseRouting();
             app.MapControllers();
             app.MapHealthChecks("_health");
@@ -45,6 +45,8 @@ namespace MultiTenant.ApiCore
 
             builder.Services.SetupSwagger();
             builder.Services.SetupVersioning();
+
+            builder.Host.SetupSerilog();
 
             return builder;
         }
