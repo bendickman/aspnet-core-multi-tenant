@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MultiTenant.Core.Entities;
 using MultiTenant.Core.Interfaces;
+using MultiTenant.Core.Settings;
 
 namespace MultiTenant.Infrastructure.Persistence
 {
     public class ApplicationDbContext : DbContext
     {
-        public string TenantId { get; set; }
+        public Tenant Tenant { get; set; }
         private readonly ITenantService _tenantService;
 
         public ApplicationDbContext(
@@ -15,7 +16,7 @@ namespace MultiTenant.Infrastructure.Persistence
             : base(options)
         {
             _tenantService = tenantService;
-            TenantId = _tenantService.GetTenant()?.Id;
+            Tenant = _tenantService.GetTenant();
         }
 
         public ApplicationDbContext() { }
@@ -25,7 +26,7 @@ namespace MultiTenant.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Product>().HasQueryFilter(a => a.TenantId == TenantId);
+            modelBuilder.Entity<Product>().HasQueryFilter(a => a.TenantId == Tenant.Id);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -53,7 +54,7 @@ namespace MultiTenant.Infrastructure.Persistence
                 {
                     case EntityState.Added:
                     case EntityState.Modified:
-                        entry.Entity.TenantId = TenantId;
+                        entry.Entity.TenantId = Tenant.Id;
                         break;
                 }
             }

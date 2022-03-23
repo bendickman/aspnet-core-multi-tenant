@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using MultiTenant.ApiCore.HealthChecks;
 using MultiTenant.ApiCore.Swagger;
 using MultiTenant.ApiCore.Versioning;
 
@@ -20,6 +21,8 @@ namespace MultiTenant.ApiCore
         {
             app.UseRouting();
             app.MapControllers();
+            app.MapHealthChecks("_health");
+            app.MapJsonHealthChecks("_health/json");
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.UseApplicationSwagger();
@@ -30,8 +33,9 @@ namespace MultiTenant.ApiCore
             Action<ApiCoreOptions> setup)
         {
             var apiDetails = new ApiDetails(string.Empty, string.Empty);
+            var healthChecksBuilder = builder.Services.AddHealthChecks();
 
-            var options = new ApiCoreOptions(apiDetails);
+            var options = new ApiCoreOptions(apiDetails, healthChecksBuilder);
             setup(options);
 
             builder.Services.AddSingleton<IApiDetails>(services => apiDetails);

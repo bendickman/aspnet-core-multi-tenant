@@ -21,7 +21,21 @@ namespace MultiTenant.Infrastructure.Services
 
             if (_httpContext != null)
             {
-                if (_httpContext.Request.Headers.TryGetValue("tenant", out var tenantId))
+                //get tenant from Query String for Health Checks
+                if (_httpContext.Request.Path.HasValue &&
+                    _httpContext.Request.Path.Value == "/_health/json")
+                {
+                    if (_httpContext.Request.QueryString.HasValue)
+                    {
+                        var tenantName = _httpContext.Request.Query["tenant"].ToString();
+                        
+                        if (!string.IsNullOrEmpty(tenantName))
+                        {
+                            SetTenant(tenantName);
+                        }
+                    }
+                }
+                else if (_httpContext.Request.Headers.TryGetValue("tenant", out var tenantId))
                 {
                     SetTenant(tenantId);
                 }
