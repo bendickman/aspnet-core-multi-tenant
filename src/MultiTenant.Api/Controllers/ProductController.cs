@@ -34,6 +34,22 @@ namespace MultiTenant.Api.Controllers
             return Ok(product);
         }
 
+        [HttpGet]
+        [ProducesResponseType(typeof(IReadOnlyList<Product>), 200)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> List()
+        {
+            var products = await _service
+                .GetAllAsync();
+
+            if (products is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(products);
+        }
+
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
