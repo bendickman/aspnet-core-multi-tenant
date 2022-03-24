@@ -23,7 +23,7 @@ namespace MultiTenant.Infrastructure.Services
             {
                 //get tenant from Query String for Health Checks
                 if (_httpContext.Request.Path.HasValue &&
-                    _httpContext.Request.Path.Value == "/_health/json")
+                    _httpContext.Request.Path.Value == "/_health")
                 {
                     if (_httpContext.Request.QueryString.HasValue)
                     {
