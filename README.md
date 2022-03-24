@@ -16,6 +16,16 @@ This application handles multi-tenancy using a Request Header and highlights how
 
 This layer is a Web API targeting .NET Core 6 that provides all the endpoints of the application (details to follow)
 
+### MultiTenant.ApiCore
+
+This project contains all of the Core API setup including Exception Handling, Swagger, Health Checks, Versioning etc...
+
+## Health Checks
+
+The Health Check to ensure a connection can be made to the database can be located at:
+
+`_health?tenant={tenantId}` & `/_health/json?tenant={tenantId}`
+
 ### MultiTenant.Core
 
 This layer contains all domain specific entities used throughout the application, interfaces and settings (appsettings).
@@ -26,7 +36,7 @@ This layer contains the implmentation logic along with the persistance code whic
 
 ### MultiTenant.UnitTests
 
-This layer contains all of the units tests for the application, which are designed to be run both during development and any deployments (CD/CI)
+This project contains all of the units tests for the application, which are designed to be run both during development and any deployments (CD/CI)
 
 ## API Endpoints
 
