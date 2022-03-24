@@ -20,7 +20,7 @@ This layer is a Web API targeting .NET Core 6 that provides all the endpoints of
 
 This project contains all of the Core API setup including Exception Handling, Swagger, Health Checks, Versioning etc...
 
-## Health Checks
+#### Health Checks
 
 The Health Check to ensure a connection can be made to the database can be located at:
 
