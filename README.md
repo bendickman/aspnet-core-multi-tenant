@@ -24,7 +24,7 @@ This project contains all of the Core API setup including Exception Handling, Sw
 
 The Health Check to ensure a connection can be made to the database can be located at:
 
-`_health?tenant={tenantId` & `/_health/json?tenant={tenantId}`
+`_health?tenant={tenantId}` & `/_health/json?tenant={tenantId}`
 
 ### MultiTenant.Core
 
