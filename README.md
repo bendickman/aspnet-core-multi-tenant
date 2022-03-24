@@ -48,7 +48,7 @@ This project contains all of the units tests for the application, which are desi
 
 *HTTP POST* `/v1/product'
 
-The easiest way to test the API is via the Swagger definition located at `/swagger/index.html`
+The easiest way to test the API is via the Swagger definition located at `/index.html`
 
 ## Technologies
 
