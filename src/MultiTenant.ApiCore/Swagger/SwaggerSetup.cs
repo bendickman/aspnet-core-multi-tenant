@@ -19,6 +19,7 @@ namespace MultiTenant.ApiCore.Swagger
                 c.OperationFilter<SwaggerDefaultValues>();
                 c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
+                c.OperationFilter<AddTenantHeaderParameter>();
             });
         }
 
