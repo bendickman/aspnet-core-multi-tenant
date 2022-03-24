@@ -75,7 +75,9 @@ namespace MultiTenant.Infrastructure.Services
 
         public string GetDatabaseProvider()
         {
-            return _tenantSettings.Defaults?.DBProvider;
+            return _currentTenant.DBProvider is not null ?
+                _currentTenant.DBProvider :
+                _tenantSettings.Defaults?.DBProvider;
         }
 
         public Tenant GetTenant()

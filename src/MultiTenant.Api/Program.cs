@@ -26,3 +26,5 @@ builder.Services.AddAndMigrateTenantDatabases(builder.Configuration);
 var app = builder.Build();
 app.ConfigureApiCore();
 app.Run();
+
+public partial class Program { }
