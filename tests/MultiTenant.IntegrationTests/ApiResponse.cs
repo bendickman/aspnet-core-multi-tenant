@@ -11,13 +11,17 @@ namespace MultiTenant.IntegrationTests
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         };
 
-        public async static Task<T> GetResponse<T>(HttpResponseMessage httpResponse)
+        public async static Task<T> GetResponse<T>(
+            HttpResponseMessage httpResponse)
         {
             httpResponse.EnsureSuccessStatusCode();
 
-            var content = await httpResponse.Content.ReadAsStringAsync();
+            var content = await httpResponse
+                .Content
+                .ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<T>(content, _jsonSerializerOptions);
+            return JsonSerializer
+                .Deserialize<T>(content, _jsonSerializerOptions);
         }
     }
 }
