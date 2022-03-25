@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HashidsNet;
+using Microsoft.AspNetCore.Mvc;
 using MultiTenant.Api.Controllers.Requests;
 using MultiTenant.Core.Entities;
 using MultiTenant.Core.Interfaces;
@@ -12,19 +13,32 @@ namespace MultiTenant.Api.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _service;
-        public ProductController(IProductService service)
+        private readonly IHashids _hashids;
+
+        public ProductController(
+            IProductService service,
+            IHashids hashids)
         {
             _service = service;
+            _hashids = hashids;
         }
 
         [HttpGet]
         [ProducesResponseType(typeof(Product), 200)]
         [ProducesResponseType(500)]
-        [Route("{id}", Name = "GetProduct")]
-        public async Task<IActionResult> GetAsync(Guid id)
+        [Route("{hashId}", Name = "GetProduct")]
+        public async Task<IActionResult> GetAsync(string hashId)
         {
+            var ids = _hashids
+                .Decode(hashId);
+
+            if (!ids?.Any() ?? true)
+            {
+                return NotFound();
+            }
+
             var product = await _service
-                .GetByIdAsync(id);
+                .GetByIdAsync(ids.First());
 
             if (product is null)
             {
@@ -65,7 +79,7 @@ namespace MultiTenant.Api.Controllers
 
             var url = Url.Link(
                 "GetProduct", 
-                new { id = product.Id });
+                new { hashId = product.Id });
 
             return Created(
                url,

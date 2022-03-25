@@ -1,4 +1,4 @@
-﻿using MultiTenant.Core.Entities;
+﻿using MultiTenant.Core.DTOs;
 
 namespace MultiTenant.Core.Interfaces
 {
@@ -9,7 +9,7 @@ namespace MultiTenant.Core.Interfaces
             string description, 
             int rate);
 
-        Task<Product> GetByIdAsync(Guid id);
+        Task<Product> GetByIdAsync(int id);
 
         Task<IReadOnlyList<Product>> GetAllAsync();
     }

@@ -1,5 +1,5 @@
 ﻿using MultiTenant.Api.Controllers.Requests;
-using MultiTenant.Core.Entities;
+using MultiTenant.Core.DTOs;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Net;

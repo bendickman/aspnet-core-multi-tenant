@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MultiTenant.Core.Entities;
+using MultiTenant.Core.Conveters;
+using MultiTenant.Core.DTOs;
 using MultiTenant.Core.Interfaces;
 using MultiTenant.Infrastructure.Persistence;
 
@@ -9,11 +10,14 @@ namespace MultiTenant.Infrastructure.Services
         : IProductService
     {
         private readonly ApplicationDbContext _context;
-        
+        private readonly IProductConverter _productConverter;
+
         public ProductService(
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            IProductConverter productConverter)
         {
             _context = context;
+            _productConverter = productConverter;
         }
 
         public async Task<Product> CreateAsync(
@@ -21,26 +25,39 @@ namespace MultiTenant.Infrastructure.Services
             string description, 
             int rate)
         {
-            var product = new Product(name, description, rate);
+            var product = new Core.Entities.Product(name, description, rate);
 
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            return product;
+            return _productConverter
+                .ToDto(product);
         }
 
         public async Task<IReadOnlyList<Product>> GetAllAsync()
         {
-            return await _context
+            var products = await _context
                 .Products
                 .ToListAsync();
+
+            return products
+                .Select(p => _productConverter.ToDto(p))
+                .ToList();
         }
 
-        public async Task<Product> GetByIdAsync(Guid id)
+        public async Task<Product> GetByIdAsync(int id)
         {
-            return await _context
+            var product = await _context
                 .Products
                 .FindAsync(id);
+
+            if (product is null)
+            {
+                return null;
+            }
+
+            return _productConverter
+                .ToDto(product);
         }
     }
 }

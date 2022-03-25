@@ -4,6 +4,8 @@ using MultiTenant.Infrastructure.Services;
 using MultiTenant.Infrastructure.Extensions;
 using MultiTenant.ApiCore;
 using MultiTenant.Api.HealthChecks;
+using HashidsNet;
+using MultiTenant.Core.Conveters;
 
 var builder = WebApplication
     .CreateBuilder(args)
@@ -17,6 +19,9 @@ var builder = WebApplication
 
 builder.Services.AddTransient<ITenantService, TenantService>();
 builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<IProductConverter, ProductConverter>();
+
+builder.Services.AddSingleton<IHashids>(_ => new Hashids("testSalt", 11));
 
 builder.Services.Configure<TenantSettings>(
     builder.Configuration.GetSection(nameof(TenantSettings)));
