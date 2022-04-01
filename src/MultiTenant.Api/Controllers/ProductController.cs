@@ -1,4 +1,6 @@
 ﻿using HashidsNet;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MultiTenant.Api.Controllers.Requests;
 using MultiTenant.Core.Entities;
@@ -10,6 +12,7 @@ namespace MultiTenant.Api.Controllers
     [ApiVersion("1.0")]
     [Route("v{version:apiVersion}/product/")]
     [Produces("application/json")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _service;
