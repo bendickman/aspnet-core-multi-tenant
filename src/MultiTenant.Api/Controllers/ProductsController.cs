@@ -10,15 +10,15 @@ namespace MultiTenant.Api.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("v{version:apiVersion}/product/")]
+    [Route("v{version:apiVersion}/products/")]
     [Produces("application/json")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class ProductController : ControllerBase
+    public class ProductsController : ControllerBase
     {
         private readonly IProductService _service;
         private readonly IHashids _hashids;
 
-        public ProductController(
+        public ProductsController(
             IProductService service,
             IHashids hashids)
         {
@@ -29,11 +29,11 @@ namespace MultiTenant.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Product), 200)]
         [ProducesResponseType(500)]
-        [Route("{hashId}", Name = "GetProduct")]
-        public async Task<IActionResult> GetAsync(string hashId)
+        [Route("{id}", Name = "GetProduct")]
+        public async Task<IActionResult> GetAsync(string id)
         {
             var ids = _hashids
-                .Decode(hashId);
+                .Decode(id);
 
             if (!ids?.Any() ?? true)
             {
