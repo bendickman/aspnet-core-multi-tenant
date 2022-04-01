@@ -22,13 +22,13 @@ namespace MultiTenant.ApiCore
         public static void ConfigureApiCore(this WebApplication app)
         {
             app.UseExceptionHandling();
+            app.UseAuthentication();
             app.UseRouting();
+            app.UseAuthorization();
             app.MapControllers();
             app.MapHealthChecks("_health");
             app.MapJsonHealthChecks("_health/json");
             app.UseHttpsRedirection();
-            app.UseAuthorization();
-            app.UseAuthentication();
             app.UseApplicationSwagger();
         }
 

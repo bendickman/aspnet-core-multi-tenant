@@ -28,6 +28,7 @@ namespace MultiTenant.ApiCore.Authentication
                     ValidateIssuer = false,
                     RequireExpirationTime = false,
                     ValidateLifetime = false,
+                    ValidateAudience = false,
                 };
             });
             
