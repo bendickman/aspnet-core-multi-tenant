@@ -50,6 +50,13 @@ This project contains all of the units tests for the application, which are desi
 
 The easiest way to test the API is via the Swagger definition located at `/index.html`
 
+## Login Details
+
+|||
+|---|---|
+|Username|user@test.co.uk|
+|Password|sh=H5QM5T&?fH7XH|
+
 ## Technologies
 
 * [.NET 6](https://docs.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core?view=aspnetcore-6.0)

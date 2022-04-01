@@ -20,6 +20,7 @@ var builder = WebApplication
 builder.Services.AddTransient<ITenantService, TenantService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IProductConverter, ProductConverter>();
+builder.Services.AddTransient<IIdentityService, IdentityService>();
 
 builder.Services.AddSingleton<IHashids>(_ => new Hashids("testSalt", 11));
 

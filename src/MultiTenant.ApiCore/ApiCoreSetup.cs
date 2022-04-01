@@ -55,6 +55,8 @@ namespace MultiTenant.ApiCore
                 .GetSection(nameof(JwtSettings))
                 .Get<JwtSettings>();
 
+            builder.Services.AddSingleton(settings);
+
             builder.Services.SetupAuthentication(settings);
 
             builder.Host.SetupSerilog();
