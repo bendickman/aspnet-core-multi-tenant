@@ -22,6 +22,39 @@ namespace MultiTenant.Infrastructure.Services
             _jwtSettings = jwtSettings;
         }
 
+        public async Task<AuthenticationResult> LoginAsync(string email, string password)
+        {
+            var user = await _userManager
+                .FindByEmailAsync(email);
+
+            //the error message is very generic to ensure we don't expose any details to hackers.
+            var errors = new List<string>
+                {
+                    "Incorrect Email or Password",
+                };
+
+            if (user is null)
+            {
+                AuthenticationResult
+                    .Error(errors);
+            }
+
+            var userHasValidPassword = await _userManager
+                .CheckPasswordAsync(user, password);
+
+            if (!userHasValidPassword)
+            {
+                return AuthenticationResult
+                    .Error(errors);
+            }
+
+            var token = GetJwtToken(user);
+
+            return AuthenticationResult
+                .Success(token);
+
+        }
+
         public async Task<AuthenticationResult> RegisterAsync(string email, string password)
         {
             var existingUser = await _userManager

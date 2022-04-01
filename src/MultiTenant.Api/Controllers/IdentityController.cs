@@ -38,5 +38,25 @@ namespace MultiTenant.Api.Controllers
             return Ok(AuthSuccessResponse
                 .Success(authResponse.Token));
         }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
+        [ProducesResponseType(typeof(AuthFailedResponse), 400)]
+        [Route("login")]
+        public async Task<IActionResult> Login(
+            [FromBody] UserRegistrationRequest request)
+        {
+            var authResponse = await _identityService
+                .LoginAsync(request.Email, request.Password);
+
+            if (!authResponse.IsSuccess)
+            {
+                return BadRequest(AuthFailedResponse
+                    .Error(authResponse.Errors));
+            }
+
+            return Ok(AuthSuccessResponse
+                .Success(authResponse.Token));
+        }
     }
 }
