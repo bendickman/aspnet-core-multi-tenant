@@ -21,4 +21,8 @@
 		<PackageReference Include="Swashbuckle.Core" Version="5.6.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\MultiTenant.Core\MultiTenant.Core.csproj" />
+	</ItemGroup>
+
 </Project>

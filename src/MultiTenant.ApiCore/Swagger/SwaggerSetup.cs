@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -20,6 +21,30 @@ namespace MultiTenant.ApiCore.Swagger
                 c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
                 c.OperationFilter<AddTenantHeaderParameter>();
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "JWT Authorization header using bearer scheme",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+
             });
         }
 
