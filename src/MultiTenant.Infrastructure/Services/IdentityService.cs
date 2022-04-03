@@ -2,7 +2,6 @@
 using Microsoft.IdentityModel.Tokens;
 using MultiTenant.Core.DTOs;
 using MultiTenant.Core.Interfaces;
-using MultiTenant.Core.Settings;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,14 +11,14 @@ namespace MultiTenant.Infrastructure.Services
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly JwtSettings _jwtSettings;
+        private readonly ITenantService _tenantService;
 
         public IdentityService(
             UserManager<IdentityUser> userManager,
-            JwtSettings jwtSettings)
+            ITenantService tenantService)
         {
             _userManager = userManager;
-            _jwtSettings = jwtSettings;
+            _tenantService = tenantService;
         }
 
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
@@ -99,8 +98,15 @@ namespace MultiTenant.Infrastructure.Services
 
         private string GetJwtToken(IdentityUser newUser)
         {
+            var tenant = _tenantService.GetTenant();
+
+            if (tenant is null)
+            {
+                throw new Exception("Invalid tenant");
+            }
+
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(tenant.SecretKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
@@ -108,10 +114,11 @@ namespace MultiTenant.Infrastructure.Services
                     new Claim(JwtRegisteredClaimNames.Sub, newUser.Email),
                     new Claim(JwtRegisteredClaimNames.Email, newUser.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),//used to invalidate the token
-                    new Claim("id", newUser.Id),
+                    new Claim("id", newUser.Id),       
+                    new Claim("Tenant", tenant.Id),
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.TokenExpirationInMinutes),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Expires = DateTime.UtcNow.AddMinutes(tenant.TokenExpirationInMinutes),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key) {  KeyId = tenant.Id}, SecurityAlgorithms.HmacSha256Signature),
             };
 
             var securityToken = tokenHandler

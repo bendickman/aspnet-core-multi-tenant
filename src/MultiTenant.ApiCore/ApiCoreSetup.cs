@@ -7,6 +7,12 @@ using MultiTenant.ApiCore.ExceptionHandling;
 using MultiTenant.ApiCore.Authentication;
 using MultiTenant.Core.Settings;
 using Microsoft.Extensions.Configuration;
+using MultiTenant.Core.Interfaces;
+using MultiTenant.Infrastructure.Services;
+using MultiTenant.Core.Conveters;
+using HashidsNet;
+using MultiTenant.Infrastructure.Extensions;
+using MultiTenant.ApiCore.Authorization;
 
 namespace MultiTenant.ApiCore
 {
@@ -42,6 +48,18 @@ namespace MultiTenant.ApiCore
             var options = new ApiCoreOptions(apiDetails, healthChecksBuilder);
             setup(options);
 
+            builder.Services.AddScoped<ITenantService, TenantService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IProductConverter, ProductConverter>();
+            builder.Services.AddScoped<IIdentityService, IdentityService>();
+
+            builder.Services.AddSingleton<IHashids>(_ => new Hashids("testSalt", 11));
+
+            builder.Services.Configure<TenantSettings>(
+                builder.Configuration.GetSection(nameof(TenantSettings)));
+
+            builder.Services.AddAndMigrateTenantDatabases(builder.Configuration);
+
             builder.Services.AddSingleton<IApiDetails>(services => apiDetails);
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddHttpContextAccessor();
@@ -57,7 +75,13 @@ namespace MultiTenant.ApiCore
 
             builder.Services.AddSingleton(settings);
 
-            builder.Services.SetupAuthentication(settings);
+            var tenantSettings = builder
+                .Configuration
+                .GetSection(nameof(TenantSettings))
+                .Get<TenantSettings>();
+
+            builder.Services.SetupAuthentication(tenantSettings);
+            builder.Services.SetupAuthorization();
 
             builder.Host.SetupSerilog();
 

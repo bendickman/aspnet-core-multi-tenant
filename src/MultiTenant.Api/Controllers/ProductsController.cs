@@ -12,7 +12,8 @@ namespace MultiTenant.Api.Controllers
     [ApiVersion("1.0")]
     [Route("v{version:apiVersion}/products/")]
     [Produces("application/json")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Tenant")]
+    
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _service;

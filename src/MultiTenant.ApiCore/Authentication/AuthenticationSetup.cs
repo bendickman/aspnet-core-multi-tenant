@@ -10,7 +10,7 @@ namespace MultiTenant.ApiCore.Authentication
     {
         public static void SetupAuthentication(
             this IServiceCollection services,
-            JwtSettings settings)
+            TenantSettings tenantSettings)
         {
             services.AddAuthentication(options =>
             {
@@ -24,14 +24,26 @@ namespace MultiTenant.ApiCore.Authentication
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.Secret)),
                     ValidateIssuer = false,
                     RequireExpirationTime = false,
                     ValidateLifetime = false,
                     ValidateAudience = false,
+                    IssuerSigningKeyResolver = (string token, SecurityToken securityToken, string kid, TokenValidationParameters validationParameters) =>
+                    {
+                        var tenant = tenantSettings.Tenants.FirstOrDefault(t => t.Id == kid);
+                        List<SecurityKey> keys = new List<SecurityKey>();
+                        if (tenant is not null)
+                        {
+                            var key = Encoding.ASCII.GetBytes(tenant.SecretKey);
+                            var signingKey = new SymmetricSecurityKey(key){ KeyId = tenant.Id };
+                            keys.Add(signingKey);
+                        }
+
+                        return keys;
+                    }
                 };
+                
             });
-            
         }
     }
 }

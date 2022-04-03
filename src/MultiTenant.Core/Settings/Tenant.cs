@@ -9,5 +9,9 @@
         public string ConnectionString { get; set; }
 
         public string DBProvider { get; set; }
+
+        public string SecretKey { get; set; }
+
+        public int TokenExpirationInMinutes { get; set; }
     }
 }
