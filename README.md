@@ -6,7 +6,7 @@ The project was built using Visual Studio 2022 targeting .NET 6
 
 ## Architecture Overview
 
-The architecture approach for this application was based on the following blog post(https://codewithmukesh.com/blog/multitenancy-in-aspnet-core/)
+The architecture approach for this application was based on the following blog post (https://codewithmukesh.com/blog/multitenancy-in-aspnet-core/) and has been enhanced with various features and functionality.
 
 Multi-tenancy can be achieved a number of different ways including Query String, Domain binding, IP address, or Claims Based. 
 
@@ -18,7 +18,7 @@ This layer is a Web API targeting .NET Core 6 that provides all the endpoints of
 
 ### MultiTenant.ApiCore
 
-This project contains all of the Core API setup including Exception Handling, Swagger, Health Checks, Versioning etc...
+This project contains all of the Core API setup including Authentication, Authorization, Exception Handling, Swagger, Health Checks, Versioning etc...
 
 #### Health Checks
 
@@ -42,17 +42,37 @@ This layer contains the implmentation logic along with the persistance code whic
 
 This project contains all of the units tests for the application, which are designed to be run both during development and any deployments (CD/CI)
 
+### MultiTenant.IntegrationTests
+
+This project contains all of the integration tests for the application, which have been setup to run as an in-memory database using the Web Application Factory
+
 ## API Endpoints
 
-- Get a Product based on the Id (GUID)
+The easiest way to test the API is via the Swagger definition located at `/index.html`
 
-*Http GET* `/v1/product/{Id}`
+### Product
+
+- Get a Product based on the Id
+
+*Http GET* `/v1/products/{Id}`
+
+- Get all Products
+
+*Http GET* `/v1/products`
 
 - Post a new product passing Name, Description & Rate
 
-*HTTP POST* `/v1/product'
+*HTTP POST* `/v1/products`
 
-The easiest way to test the API is via the Swagger definition located at `/index.html`
+### Account
+
+- Register an account
+
+*Http POST* `/v1/identity/register`
+
+- Login to an account
+
+*Http POST* `/v1/identity/login`
 
 ## Login Details
 
