@@ -60,5 +60,14 @@ The easiest way to test the API is via the Swagger definition located at `/index
 ## Technologies
 
 * [.NET 6](https://docs.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core?view=aspnetcore-6.0)
+* [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/)
+* [Swagger](https://swagger.io/)
+* [Serilog](https://serilog.net/)
+* [Moq](https://github.com/moq/moq4)
+* [NUnit](https://nunit.org/)
+* [Integration Testing](https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-6.0)
+* [JWT Authentication & Authorization](https://jwt.io/)
+* [Health Checks](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-6.0)
+* [HashIds](https://hashids.org/)
 
 
