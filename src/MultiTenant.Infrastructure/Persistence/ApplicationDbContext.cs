@@ -25,10 +25,14 @@ namespace MultiTenant.Infrastructure.Persistence
 
         public DbSet<Product> Products { get; set; }
 
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Product>().HasQueryFilter(a => a.TenantId == Tenant.Id);
+
+            modelBuilder.Entity<RefreshToken>().Property(r => r.Id).HasDefaultValueSql("NEWID()");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

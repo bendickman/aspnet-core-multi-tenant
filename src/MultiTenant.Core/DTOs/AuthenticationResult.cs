@@ -4,6 +4,8 @@
     {
         public string Token { get; set; }
 
+        public string RefreshToken { get; set; }
+
         public bool IsSuccess { get; set; }
 
         public IEnumerable<string> Errors { get; set; }
@@ -16,11 +18,14 @@
             };
         }
 
-        public static AuthenticationResult Success(string token)
+        public static AuthenticationResult Success(
+            string token,
+            string refreshToken)
         {
             return new AuthenticationResult
             {
                 Token = token,
+                RefreshToken = refreshToken,
                 IsSuccess = true,
                 Errors = Enumerable.Empty<string>(),
             };

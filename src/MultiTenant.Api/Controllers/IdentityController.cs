@@ -36,7 +36,7 @@ namespace MultiTenant.Api.Controllers
             }
 
             return Ok(AuthSuccessResponse
-                .Success(authResponse.Token));
+                .Success(authResponse.Token, authResponse.RefreshToken));
         }
 
         [HttpPost]
@@ -56,7 +56,27 @@ namespace MultiTenant.Api.Controllers
             }
 
             return Ok(AuthSuccessResponse
-                .Success(authResponse.Token));
+                .Success(authResponse.Token, authResponse.RefreshToken));
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
+        [ProducesResponseType(typeof(AuthFailedResponse), 400)]
+        [Route("refresh")]
+        public async Task<IActionResult> Refresh(
+            [FromBody] RefreshTokenRequest request)
+        {
+            var authResponse = await _identityService
+                .RefreshTokenAsync(request.Token, request.RefreshToken);
+
+            if (!authResponse.IsSuccess)
+            {
+                return BadRequest(AuthFailedResponse
+                    .Error(authResponse.Errors));
+            }
+
+            return Ok(AuthSuccessResponse
+                .Success(authResponse.Token, authResponse.RefreshToken));
         }
     }
 }

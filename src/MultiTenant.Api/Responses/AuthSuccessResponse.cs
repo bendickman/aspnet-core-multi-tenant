@@ -4,11 +4,16 @@
     {
         public string Token { get; set; }
 
-        public static AuthSuccessResponse Success(string token)
+        public string RefreshToken { get; set; }
+
+        public static AuthSuccessResponse Success(
+            string token,
+            string refreshToken)
         {
             return new AuthSuccessResponse
             {
                 Token = token,
+                RefreshToken = refreshToken,
             };
         }
     }

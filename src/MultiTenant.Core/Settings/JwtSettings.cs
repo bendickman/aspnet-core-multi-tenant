@@ -4,6 +4,8 @@
     {
         public string Secret { get; set; }
 
-        public int TokenExpirationInMinutes { get; set; }
+        public int TokenExpirationInSeconds { get; set; }
+
+        public int RefreshTokenLifetimeInDays { get; set; }
     }
 }

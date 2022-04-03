@@ -12,6 +12,30 @@ namespace MultiTenant.ApiCore.Authentication
             this IServiceCollection services,
             TenantSettings tenantSettings)
         {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateIssuer = false,
+                RequireExpirationTime = false,
+                ValidateLifetime = false,
+                ValidateAudience = false,
+                IssuerSigningKeyResolver = (string token, SecurityToken securityToken, string kid, TokenValidationParameters validationParameters) =>
+                {
+                    var tenant = tenantSettings.Tenants.FirstOrDefault(t => t.Id == kid);
+                    List<SecurityKey> keys = new List<SecurityKey>();
+                    if (tenant is not null)
+                    {
+                        var key = Encoding.ASCII.GetBytes(tenant.SecretKey);
+                        var signingKey = new SymmetricSecurityKey(key) { KeyId = tenant.Id };
+                        keys.Add(signingKey);
+                    }
+
+                    return keys;
+                }
+            };
+
+            services.AddSingleton(tokenValidationParameters);
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -21,28 +45,7 @@ namespace MultiTenant.ApiCore.Authentication
             .AddJwtBearer(options =>
             {
                 options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    ValidateIssuer = false,
-                    RequireExpirationTime = false,
-                    ValidateLifetime = false,
-                    ValidateAudience = false,
-                    IssuerSigningKeyResolver = (string token, SecurityToken securityToken, string kid, TokenValidationParameters validationParameters) =>
-                    {
-                        var tenant = tenantSettings.Tenants.FirstOrDefault(t => t.Id == kid);
-                        List<SecurityKey> keys = new List<SecurityKey>();
-                        if (tenant is not null)
-                        {
-                            var key = Encoding.ASCII.GetBytes(tenant.SecretKey);
-                            var signingKey = new SymmetricSecurityKey(key){ KeyId = tenant.Id };
-                            keys.Add(signingKey);
-                        }
-
-                        return keys;
-                    }
-                };
-                
+                options.TokenValidationParameters = tokenValidationParameters;                
             });
         }
     }
