@@ -26,6 +26,10 @@ The Health Check to ensure a connection can be made to the database can be locat
 
 `_health?tenant={tenantId}` & `/_health/json?tenant={tenantId}`
 
+#### Authentication & Authorization
+
+This project utilizes Json Web Tokens (JWT) to provide access to the system. The JWT contains details of the tenant the user has registered with and will deny access when any attempt is made to another tenant.
+
 ### MultiTenant.Core
 
 This layer contains all domain specific entities used throughout the application, interfaces and settings (appsettings).
