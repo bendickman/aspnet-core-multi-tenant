@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MultiTenant.ApiCore.HealthChecks;
 using MultiTenant.ApiCore.Swagger;
 using MultiTenant.ApiCore.Versioning;
+using MultiTenant.ApiCore.Validation;
 using MultiTenant.ApiCore.ExceptionHandling;
 using MultiTenant.ApiCore.Authentication;
 using MultiTenant.Core.Settings;
@@ -13,6 +14,7 @@ using MultiTenant.Core.Conveters;
 using HashidsNet;
 using MultiTenant.Infrastructure.Extensions;
 using MultiTenant.ApiCore.Authorization;
+using MultiTenant.ApiCore.Validation.Filters;
 
 namespace MultiTenant.ApiCore
 {
@@ -63,8 +65,12 @@ namespace MultiTenant.ApiCore
             builder.Services.AddSingleton<IApiDetails>(services => apiDetails);
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddControllers();
-            
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<ValidationFilter>();
+            });
+
+            builder.Services.SetupValidation();
             builder.Services.SetupSwagger();
             builder.Services.SetupVersioning();
 
