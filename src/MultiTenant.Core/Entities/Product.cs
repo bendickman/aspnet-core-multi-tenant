@@ -8,7 +8,7 @@ namespace MultiTenant.Core.Entities
         public Product(
             string name, 
             string description, 
-            int rate)
+            decimal rate)
         {
             Name = name;
             Description = description;
@@ -22,6 +22,6 @@ namespace MultiTenant.Core.Entities
 
         public string Description { get; private set; }
 
-        public int Rate { get; private set; }
+        public decimal Rate { get; private set; }
     }
 }

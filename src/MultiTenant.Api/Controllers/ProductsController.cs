@@ -83,7 +83,7 @@ namespace MultiTenant.Api.Controllers
 
             var url = Url.Link(
                 "GetProduct", 
-                new { hashId = product.Id });
+                new { id = product.Id });
 
             return Created(
                url,

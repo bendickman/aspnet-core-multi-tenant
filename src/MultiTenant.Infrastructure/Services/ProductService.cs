@@ -23,7 +23,7 @@ namespace MultiTenant.Infrastructure.Services
         public async Task<Product> CreateAsync(
             string name, 
             string description, 
-            int rate)
+            decimal rate)
         {
             var product = new Core.Entities.Product(name, description, rate);
 
