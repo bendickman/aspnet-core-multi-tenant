@@ -16,8 +16,8 @@ namespace MultiTenant.ApiCore.Authentication
             {
                 ValidateIssuerSigningKey = true,
                 ValidateIssuer = false,
-                RequireExpirationTime = false,
-                ValidateLifetime = false,
+                RequireExpirationTime = true,
+                ValidateLifetime = true,
                 ValidateAudience = false,
                 IssuerSigningKeyResolver = (string token, SecurityToken securityToken, string kid, TokenValidationParameters validationParameters) =>
                 {
