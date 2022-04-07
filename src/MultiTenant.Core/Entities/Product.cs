@@ -1,7 +1,9 @@
 ﻿using MultiTenant.Core.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MultiTenant.Core.Entities
 {
+    [Table("Product")]
     public class Product 
         : BaseEntity, ITenantable
     {

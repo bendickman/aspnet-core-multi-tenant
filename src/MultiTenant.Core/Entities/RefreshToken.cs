@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MultiTenant.Core.Entities
 {
+    [Table("RefreshToken")]
     public class RefreshToken
     {
         [Key]
