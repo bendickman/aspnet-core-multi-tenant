@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MultiTenant.Api.Controllers.Requests;
 using MultiTenant.Core.Entities;
 using MultiTenant.Core.Interfaces;
+using MultiTenant.Core.Responses;
 
 namespace MultiTenant.Api.Controllers
 {
@@ -53,9 +54,11 @@ namespace MultiTenant.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IReadOnlyList<Product>), 200)]
+        [ProducesResponseType(typeof(ILogger<Core.DTOs.Product>), 200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(
+            int currentPage = 1,
+            int pageSize = 10)
         {
             var products = await _service
                 .GetAllAsync();
@@ -65,7 +68,14 @@ namespace MultiTenant.Api.Controllers
                 return NotFound();
             }
 
-            return Ok(products);
+            var response = new ListResponse<Core.DTOs.Product>
+            {
+                Results = products.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList(),
+                IsSuccess = true,
+                Pagination = new Pagination(currentPage, pageSize, products.Count),
+            };
+
+            return Ok(response);
         }
 
         [HttpPost]
