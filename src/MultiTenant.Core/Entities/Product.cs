@@ -5,7 +5,7 @@ namespace MultiTenant.Core.Entities
 {
     [Table("Product")]
     public class Product 
-        : BaseEntity, ITenantable
+        : BaseEntity
     {
         public Product(
             string name, 
@@ -18,12 +18,14 @@ namespace MultiTenant.Core.Entities
         }
         protected Product() { }
 
-        public string TenantId { get; set; }
-
         public string Name { get; private set; }
 
         public string Description { get; private set; }
 
         public decimal Rate { get; private set; }
+
+        public int CategoryId { get; set; }
+
+        public Category Category { get; set; }
     }
 }

@@ -30,11 +30,19 @@ namespace MultiTenant.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Product>()
-                .HasQueryFilter(a => a.TenantId == Tenant.Id)
-                .Property(p => p.Rate).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Product>(product =>
+            {
+                product.HasOne(p => p.Category).WithMany(c => c.Products).HasForeignKey(c => c.CategoryId);
+
+                product.Property(p => p.Rate).HasColumnType("decimal(10,2)");
+            }); 
 
             modelBuilder.Entity<RefreshToken>().Property(r => r.Id).HasDefaultValueSql("NEWID()");
+
+            modelBuilder.Entity<Category>(category =>
+            {
+                category.HasMany(c => c.Products).WithOne(c => c.Category).HasForeignKey(c => c.CategoryId);
+            });
 
         }
 
