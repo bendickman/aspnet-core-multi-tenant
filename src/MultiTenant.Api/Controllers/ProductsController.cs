@@ -13,7 +13,7 @@ namespace MultiTenant.Api.Controllers
     [ApiVersion("1.0")]
     [Route("v{version:apiVersion}/products/")]
     [Produces("application/json")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Tenant")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Tenant")]
     
     public class ProductsController : ControllerBase
     {
@@ -84,7 +84,7 @@ namespace MultiTenant.Api.Controllers
         public async Task<IActionResult> CreateAsync(CreateProductRequest request)
         {
             var product = await _service
-                .CreateAsync(request.Name, request.Description, request.Rate);
+                .CreateAsync(request.Name, request.Description, request.Rate, _hashids.Decode(request.CategoryId).First());
 
             if (product is null)
             {

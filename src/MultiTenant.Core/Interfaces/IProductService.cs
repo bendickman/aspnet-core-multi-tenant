@@ -7,7 +7,8 @@ namespace MultiTenant.Core.Interfaces
         Task<Product> CreateAsync(
             string name, 
             string description, 
-            decimal rate);
+            decimal rate,
+            int categoryId);
 
         Task<Product> GetByIdAsync(int id);
 

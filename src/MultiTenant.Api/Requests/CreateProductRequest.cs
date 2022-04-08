@@ -7,5 +7,7 @@
         public string Description { get; set; }
 
         public decimal Rate { get; set; }
+
+        public string CategoryId { get; set; }
     }
 }

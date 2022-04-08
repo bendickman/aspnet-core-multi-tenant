@@ -18,6 +18,9 @@ namespace MultiTenant.Api.Validators
 
             RuleFor(c => c.Rate)
                 .NotEmpty();
+
+            RuleFor(c => c.CategoryId)
+                .NotEmpty();
         }
     }
 }

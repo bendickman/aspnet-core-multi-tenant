@@ -10,11 +10,13 @@ namespace MultiTenant.Core.Entities
         public Product(
             string name, 
             string description, 
-            decimal rate)
+            decimal rate,
+            int categoryId)
         {
             Name = name;
             Description = description;
             Rate = rate;
+            CategoryId = categoryId;
         }
         protected Product() { }
 

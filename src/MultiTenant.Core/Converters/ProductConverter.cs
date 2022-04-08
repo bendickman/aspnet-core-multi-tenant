@@ -20,6 +20,7 @@ namespace MultiTenant.Core.Conveters
                 Name = productEntity.Name,
                 Description = productEntity.Description,
                 Rate = productEntity.Rate,
+                CategoryId = _hashids.Encode(productEntity.CategoryId),
             };
         }
 
@@ -28,7 +29,8 @@ namespace MultiTenant.Core.Conveters
             return new Entities.Product(
                 productDto.Name,
                 productDto.Description,
-                productDto.Rate);
+                productDto.Rate,
+                _hashids.Decode(productDto.CategoryId).First());
         }
     }
 }

@@ -23,9 +23,10 @@ namespace MultiTenant.Infrastructure.Services
         public async Task<Product> CreateAsync(
             string name, 
             string description, 
-            decimal rate)
+            decimal rate,
+            int categoryId)
         {
-            var product = new Core.Entities.Product(name, description, rate);
+            var product = new Core.Entities.Product(name, description, rate, categoryId);
 
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
@@ -38,6 +39,7 @@ namespace MultiTenant.Infrastructure.Services
         {
             var products = await _context
                 .Products
+                .Include(p => p.Category)
                 .ToListAsync();
 
             return products
@@ -49,7 +51,8 @@ namespace MultiTenant.Infrastructure.Services
         {
             var product = await _context
                 .Products
-                .FindAsync(id);
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product is null)
             {
